@@ -1,0 +1,122 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:p="http://primefaces.org/ui">
+	<!---->
+	<ui:define name="titulo">Pesquisa de Usuario</ui:define>
+
+	<ui:define name="corpo">
+		<h:form id="frmPesquisa">
+
+			<style type="text/css">
+.maior {
+	background-color: #d13814 !important;
+}
+
+.menor {
+	background-color: #98c807 !important;
+}
+</style>
+			<h1>Pesquisa de Tarefa</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px">
+				<p:toolbarGroup>
+					<p:commandButton value="Pesquisar"
+						action="#{pesquisaUsuarioBean.pesquisar()}" update="@form" />
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Novo" outcome="/tarefa/CadastroTarefa" />
+				</p:toolbarGroup>
+			</p:toolbar>
+
+
+			<p:dataTable id="tarefaTable" value="#{pesquisaTarefa.tarefas}"
+				var="tarefa" style="margin-top: 20px" editable="true"
+				emptyMessage="Nenhum tarefa encontrado." rows="20" paginator="true"
+				paginatorAlwaysVisible="false" paginatorPosition="bottom"
+				rowStyleClass="#{tarefa.corCusto == 'MAIOR' ? 'maior' : 
+                                 tarefa.corCusto == 'MENOR' ? 'menor' :  null}">
+
+				<p:ajax event="rowEdit" listener="#{pesquisaTarefa.onRowEdit}"
+					update=":form:msgs" />
+				<p:ajax event="rowEditCancel"
+					listener="#{pesquisaTarefa.onRowCancel}" update=":form:msgs" />
+
+				<p:column headerText="Id" style="text-align: center; width: 100px">
+					<h:outputText value="#{tarefa.id}" />
+					</f:facet>
+				</p:column>
+
+				<p:column headerText="Nome da tarefa">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarefa.nome}" />
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tarefa.nome}" style="width:100%"
+								label="Nome" />
+						</f:facet>
+				</p:column>
+
+				<p:column headerText="Data Limite"
+					style="text-align: center; width: 140px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarefa.dataLimite}">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputText value="#{tarefa.dataLimite}" style="width:100%"
+								label="data Limite">
+								<f:convertDateTime pattern="dd/MM/yyyy" />
+							</p:inputText>
+						</f:facet>
+				</p:column>
+
+				<p:column headerText="Valor" style="text-align: right; width: 120px">
+					<p:cellEditor>
+						<f:facet name="output">
+							<h:outputText value="#{tarefa.custo}">
+								<f:convertNumber type="currency" currencySymbol="R$" />
+							</h:outputText>
+						</f:facet>
+						<f:facet name="input">
+							<p:inputNumber value="#{tarefa.custo}" style="width:100%"
+								label="Price" symbol="R$" />
+						</f:facet>
+					</p:cellEditor>
+				</p:column>
+
+
+				<p:column style="width: 100px; text-align: center">
+					<p:rowEditor editTitle="Edit Row" cancelTitle="Cancela Edita"
+						saveTitle="Save Row" />
+					<p:commandButton icon="ui-icon-trash" title="Excluir"
+						oncomplete="PF('confirmacaoExclusao').show()" process="@this"
+						update=":frmPesquisa:confirmacaoExclusaoDialog">
+						<f:setPropertyActionListener
+							target="#{pesquisaTarefa.tarefaSelecionado}"
+							value="#{tarefa}" />
+					</p:commandButton>
+
+				</p:column>
+			</p:dataTable>
+
+			<p:confirmDialog header="Exclusão da Tarefa"
+				message="Tem certeza que deseja excluir a tarefa #{pesquisaTarefa.tarefaSelecionado.id}?"
+				widgetVar="confirmacaoExclusao" id="confirmacaoExclusaoDialog">
+				<p:button value="Não"
+					onclick="PF('confirmacaoExclusao').hide(); return false;" />
+				<p:commandButton value="Sim"
+					oncomplete="PF('confirmacaoExclusao').hide();"
+					action="#{pesquisaTarefa.excluir}" process="@this"
+					update=":frmPesquisa:tarefaTable" />
+			</p:confirmDialog>
+		</h:form>
+	</ui:define>
+</ui:composition>

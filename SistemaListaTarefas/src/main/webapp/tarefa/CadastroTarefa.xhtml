@@ -1,0 +1,57 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui" xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">#{cadastroTarefa.editando ? 'Edição de tarefa' : 'Nova Tarefa'}</ui:define>
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<o:viewParam name="usuario" value="#{cadastroUsuarioBean.usuario}" />
+
+		</f:metadata>
+
+		<h:form>
+			<h1>#{cadastroTarefa.editando ? 'Edição de tarefa' : 'Nova
+				Tarefa'}</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px" id="botoes">
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/tarefa/CadastroTarefa" />
+					<p:commandButton value="Salvar" id="botaoSalvar"
+						action="#{cadastroTarefa.salvar}" process="@this painelTarefa"
+						update="@form" />
+
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" outcome="/usuario/PesquisaTarefa" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:panelGrid columns="2" id="painelTarefa"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+				<p:outputLabel value="Nome Tarefa" for="nome" />
+				<p:inputText id="nome" style="width:300px" maxlength="70"
+					value="#{cadastroTarefa.tarefa.nome}" required="true"
+					requiredMessage="O nome da tarefa é de preenchimento obrigatório" />
+
+				<p:outputLabel value="Custo" for="custo" />
+				<p:inputText id="custo" value="#{cadastroTarefa.tarefa.custo}"
+					requiredMessage="O custo é de preenchimento obrigatório">
+					<f:convertNumber maxFractionDigits="2" minFractionDigits="2"
+						type="currency" />
+				</p:inputText>
+				<p:outputLabel value="Data Limite" for="dataLimite" />
+				<p:calendar id="dataLimite" size="10" pattern="dd/MM/yyyy"
+					value="#{cadastroTarefa.tarefa.dataLimite}"
+					requiredMessage="A data limite é de preenchimento obrigatório" />
+			</p:panelGrid>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
