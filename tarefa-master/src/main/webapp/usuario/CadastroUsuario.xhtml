@@ -1,0 +1,122 @@
+<ui:composition template="/WEB-INF/template/LayoutPadrao.xhtml"
+	xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:o="http://omnifaces.org/ui" xmlns:p="http://primefaces.org/ui">
+
+	<ui:define name="titulo">#{cadastroUsuarioBean.editando ? 'Edição de Usuário' : 'Novo Usuário'}</ui:define>
+
+	<ui:define name="corpo">
+		<f:metadata>
+			<o:viewParam name="usuario" value="#{cadastroUsuarioBean.usuario}" />
+
+		</f:metadata>
+
+		<h:form>
+			<h1>#{cadastroUsuarioBean.editando ? 'Edição de Usuário' : 'Novo
+				Usuário'}</h1>
+
+			<p:messages autoUpdate="true" closable="true" />
+
+			<p:toolbar style="margin-top: 20px" id="botoes">
+				<p:toolbarGroup>
+					<p:button value="Novo" outcome="/usuario/CadastroUsuario" />
+					<p:commandButton value="Salvar" id="botaoSalvar"
+						action="#{cadastroUsuarioBean.salvar}" process="@this painelUsuario"
+						update="@form" />
+
+				</p:toolbarGroup>
+				<p:toolbarGroup align="right">
+					<p:button value="Pesquisa" outcome="/usuario/PesquisaUsuario" />
+				</p:toolbarGroup>
+			</p:toolbar>
+			<p:panelGrid columns="2" id="painelUsuario"
+				style="width: 100%; margin-top: 20px" columnClasses="rotulo, campo">
+
+				<p:outputLabel value="Nome" for="inputText-nome" />
+				<p:inputText id="inputText-nome" style="width:300px" maxlength="70"
+					value="#{cadastroUsuarioBean.usuario.nome}" required="true"
+					requiredMessage="O nome é de preenchimento obrigatório" />
+
+				<p:outputLabel value="E-mail" for="inputText-email" />
+				<p:inputText id="inputText-email" style="width:300px" maxlength="70"
+					value="#{cadastroUsuarioBean.usuario.email}" required="true"
+					requiredMessage="O e-mail é de preenchimento obrigatório" />
+
+				<h:outputLabel value="CPF " for="cpf" />
+				<p:inputMask mask="999.999.999-99" id="cpf"
+					requiredMessage="Campo CPF  é obrigatório"
+					value="#{cadastroUsuarioBean.usuario.cpf}">
+
+				</p:inputMask>
+
+				<h:outputLabel for="password" value="Senha" />
+				<h:inputSecret value="#{cadastroUsuarioBean.usuario.senha}"
+					id="password" required="true"
+					requiredMessage="é necessário que você informe sua senha."
+					validatorMessage="a senha deve conter entre 6 e 20 caracteres."
+					binding="#{passwordComponent}">
+					<f:ajax event="blur" render="m_password" />
+				</h:inputSecret>
+
+
+				<h:outputLabel for="confirmPassword" value="Confirme a senha" />
+				<h:inputSecret id="confirmPassword"
+					required="#{not empty passwordComponent.value}"
+					styleClass="form-control"
+					requiredMessage="é necessário que você informe a confirmação de sua senha.">
+					<f:validator validatorId="confirmPasswordValidator" />
+					<f:attribute name="passwordComponent" value="#{passwordComponent}" />
+					<f:ajax event="blur" execute="confirmPassword password"
+						render="m_confirm" />
+				</h:inputSecret>
+			</p:panelGrid>
+
+			<p:commandButton value="Novo Perfil"
+				action="#{cadastroUsuarioBean.novoPerfil}"
+				oncomplete="PF('perfilDialog').show()" process="@this"
+				update="perfilPanel">
+				<p:resetInput target="perfilPanel" />
+			</p:commandButton>
+
+			<p:dataTable id="perfilTable"
+				value="#{cadastroUsuarioBean.usuario.grupos}" var="perfil"
+				emptyMessage="Nenhum Perfil adicionado." reflow="true"
+				style="margin-top: 10px">
+
+				<p:column headerText="Perfil">
+					<h:outputText value="#{perfil.descricao.value}" />
+				</p:column>
+			</p:dataTable>
+
+			<p:dialog widgetVar="perfilDialog" header="Novo Perfil"
+				resizable="false" style="min-width: 350px" responsive="true">
+
+				<h:panelGroup id="perfilPanel" layout="block" styleClass="ui-fluid">
+					<p:messages id="msgDialog" autoUpdate="false" />
+					<p:panelGrid columns="2" layout="grid"
+						styleClass="panelgrid-noborder"
+						columnClasses="ui-grid-col-4, ui-grid-col-8">
+						<p:outputLabel value="Tipo de Grupo" for="statusGrupo" />
+						<p:selectOneMenu id="statusGrupo"
+							value="#{cadastroUsuarioBean.grupo.descricao}">
+							<f:selectItem itemLabel="Selecione" />
+							<f:selectItem itemLabel="Admin" itemValue="ADMIN" />
+							<f:selectItem itemLabel="Admin_Comum" itemValue="ADMIN_COMMON" />
+							<f:selectItem itemLabel="Comum" itemValue="COMMON" />
+						</p:selectOneMenu>
+
+
+						<p:commandButton value="Adicionar"
+							action="#{cadastroUsuarioBean.addPerfil}"
+							process="@this perfilPanel" update="perfilPanel perfilTable"
+							oncomplete="if (!args.validationFailed) PF('perfilDialog').hide()" />
+					</p:panelGrid>
+				</h:panelGroup>
+			</p:dialog>
+
+		</h:form>
+	</ui:define>
+
+</ui:composition>
