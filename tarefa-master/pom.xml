@@ -51,14 +51,6 @@
 			<version>5.4.21.Final</version>
 		</dependency>
 
-		<!-- Driver JDBC do MySQL -->
-		<dependency>
-			<groupId>mysql</groupId>
-			<artifactId>mysql-connector-java</artifactId>
-			<version>5.1.38</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- Weld (implementação do CDI) -->
 		<dependency>
 			<groupId>org.jboss.weld.servlet</groupId>
@@ -114,46 +106,6 @@
 			<scope>compile</scope>
 		</dependency>
 
-		<!-- IREPORT -->
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports</artifactId>
-			<version>6.14.0</version>
-		</dependency>
-		<dependency>
-			<groupId>net.sf.jasperreports</groupId>
-			<artifactId>jasperreports-fonts</artifactId>
-			<version>6.14.0</version>
-		</dependency>
-
-		<!-- Abstração para envio de e-mails <dependency> <groupId>com.outjected</groupId> 
-			<artifactId>simple-email</artifactId> <version>0.2.1</version> <scope>compile</scope> 
-			</dependency> -->
-
-		<!-- Requerido para envio de e-mails -->
-		<dependency>
-			<groupId>javax.mail</groupId>
-			<artifactId>mail</artifactId>
-			<version>1.4.7</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- Usado para templates de emails -->
-		<dependency>
-			<groupId>org.apache.velocity</groupId>
-			<artifactId>velocity</artifactId>
-			<version>1.7</version>
-			<scope>compile</scope>
-		</dependency>
-
-		<!-- Formatar números em templates -->
-		<dependency>
-			<groupId>velocity-tools</groupId>
-			<artifactId>velocity-tools-generic</artifactId>
-			<version>1.1</version>
-			<scope>compile</scope>
-		</dependency>
-
 		<!-- Spring Security (Autenticação e Autorização -->
 		<dependency>
 			<groupId>org.springframework.security</groupId>
@@ -185,11 +137,6 @@
 			<scope>provided</scope>
 		</dependency>
 
-		<dependency>
-			<groupId>org.apache.poi</groupId>
-			<artifactId>poi-ooxml</artifactId>
-			<version>4.1.2</version>
-		</dependency>
 	</dependencies>
 
 	<build>
